@@ -19,18 +19,27 @@ struct ContentView: View {
                 .frame(width: 200, height: 200)
                 .padding()
                 .onTapGesture {
-                    randomValue = Int.random(in: 1...6)
-                    withAnimation {
+                    chooseRandom(times: 3)
+                    withAnimation(.interpolatingSpring(Spring(stiffness: 10, damping: 2))) {
                         rotation += 360
                     }
                 }
                 .rotationEffect(.degrees(rotation))
                 .rotation3DEffect(.degrees(rotation), axis: (x: 1, y: 1, z:0))
-                Spacer()
-                }
+            Spacer()
+        }
+    }
+    
+    func chooseRandom(times:Int) {
+        if times > 0 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                randomValue = Int.random(in: 1...6)
+                chooseRandom(times: times - 1)
             }
         }
-
-#Preview {
-    ContentView()
+    }
 }
+    
+    #Preview {
+        ContentView()
+    }
